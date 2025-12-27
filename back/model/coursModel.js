@@ -184,7 +184,7 @@ const coursModel = {
     async enrollStudent(idUser, idCours) {
         const query = `
             INSERT INTO "ETUDIANT_COURS"
-            ("idUser", "idCours", "temps_debut", "temps_fin", "temps_concentration", "enrolledAt", "progress", "completed")
+            ("idUser", "idCours", "tempsDebut", "tempsFin", "tempsConcentration", "enrolledAt", "progress", "completed")
             VALUES ($1, $2, 0, 0, 0, CURRENT_TIMESTAMP, 0, FALSE)
             ON CONFLICT ("idUser", "idCours") DO NOTHING
             RETURNING *

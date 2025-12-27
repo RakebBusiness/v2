@@ -126,7 +126,7 @@ const exerciceController = {
                 return res.status(404).json({ error: 'Exercise not found' });
             }
 
-            if (role !== 'admin' && exercise.idEnseignant !== userId) {
+            if (role !== 'admin' && exercise.idenseignant !== userId) {
                 return res.status(403).json({ error: 'You can only update your own exercises' });
             }
 
@@ -171,7 +171,7 @@ const exerciceController = {
                 return res.status(404).json({ error: 'Exercise not found' });
             }
 
-            if (role !== 'admin' && exercise.idEnseignant !== userId) {
+            if (role !== 'admin' && exercise.idenseignant !== userId) {
                 return res.status(403).json({ error: 'You can only delete your own exercises' });
             }
 
