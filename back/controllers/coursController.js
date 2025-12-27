@@ -133,18 +133,13 @@ const coursController = {
             const userId = req.userId;
             const role = req.role;
 
-            if (role !== 'etudiant') {
-                return res.status(403).json({ error: 'Only students can enroll in courses' });
+            if (!role || (role !== 'etudiant' && role !== 'enseignant')) {
+                return res.status(403).json({ error: 'Only students and teachers can enroll in courses' });
             }
 
             const course = await coursModel.findById(id);
             if (!course) {
                 return res.status(404).json({ error: 'Course not found' });
-            }
-
-            const student = await etudiantModel.findById(userId);
-            if (!student) {
-                return res.status(400).json({ error: 'Student profile not found' });
             }
 
             const isAlreadyEnrolled = await coursModel.isEnrolled(userId, id);
@@ -177,8 +172,8 @@ const coursController = {
             const userId = req.userId;
             const role = req.role;
 
-            if (role !== 'etudiant') {
-                return res.status(403).json({ error: 'Only students can finish courses' });
+            if (!role || (role !== 'etudiant' && role !== 'enseignant')) {
+                return res.status(403).json({ error: 'Only students and teachers can finish courses' });
             }
 
             const isEnrolled = await coursModel.isEnrolled(userId, id);
@@ -201,8 +196,8 @@ const coursController = {
             const userId = req.userId;
             const role = req.role;
 
-            if (role !== 'etudiant') {
-                return res.status(403).json({ error: 'Only students can update progress' });
+            if (!role || (role !== 'etudiant' && role !== 'enseignant')) {
+                return res.status(403).json({ error: 'Only students and teachers can update progress' });
             }
 
             if (typeof progress !== 'number' || progress < 0 || progress > 100) {

@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS "ETUDIANT_COURS" (
     "tempsFin" INT,
     "tempsConcentration" INT,
     PRIMARY KEY ("idUser", "idCours"),
-    FOREIGN KEY ("idUser") REFERENCES "ETUDIANT"("idUser") ON DELETE CASCADE,
+    FOREIGN KEY ("idUser") REFERENCES "USER"("idUser") ON DELETE CASCADE,
     FOREIGN KEY ("idCours") REFERENCES "COURS"("idCours") ON DELETE CASCADE
 );
 

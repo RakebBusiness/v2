@@ -36,14 +36,25 @@ The enrollment system allows students to enroll in courses, track their progress
 
 ## Database Schema
 
-### Migration: `add_enrollment_timestamps.sql`
+### Migration 1: `add_enrollment_timestamps.sql`
 ```sql
 ALTER TABLE "ETUDIANT_COURS"
 ADD COLUMN IF NOT EXISTS "enrolledAt" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 ADD COLUMN IF NOT EXISTS "finishedAt" TIMESTAMP;
 ```
 
-Note: Run this migration on your local PostgreSQL database before using the enrollment system.
+### Migration 2: `allow_teachers_to_enroll.sql`
+```sql
+-- Allow both students and teachers to enroll in courses
+ALTER TABLE "ETUDIANT_COURS"
+DROP CONSTRAINT IF EXISTS "ETUDIANT_COURS_idUser_fkey";
+
+ALTER TABLE "ETUDIANT_COURS"
+ADD CONSTRAINT "ETUDIANT_COURS_idUser_fkey"
+FOREIGN KEY ("idUser") REFERENCES "USER"("idUser") ON DELETE CASCADE;
+```
+
+Note: Run these migrations on your local PostgreSQL database before using the enrollment system. Use the provided migration scripts in `/back/migrations/` directory.
 
 ## API Endpoints
 
@@ -61,7 +72,7 @@ POST /courses/:id/enroll
 Headers: Authorization: Bearer <token>
 ```
 - Creates enrollment record with timestamps
-- Only students can enroll
+- Both students and teachers can enroll
 
 ### Mark Course as Complete
 ```
@@ -69,7 +80,7 @@ POST /courses/:id/finish
 Headers: Authorization: Bearer <token>
 ```
 - Sets completion status and finish timestamp
-- Only enrolled students can finish courses
+- Only enrolled users (students and teachers) can finish courses
 
 ### Update Course Progress
 ```
@@ -78,7 +89,7 @@ Headers: Authorization: Bearer <token>
 Body: { "progress": 50 }
 ```
 - Updates progress (0-100%)
-- Only enrolled students can update progress
+- Only enrolled users (students and teachers) can update progress
 
 ## Frontend Components
 
